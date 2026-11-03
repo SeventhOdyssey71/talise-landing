@@ -48,7 +48,7 @@ import { SiteFooter, SiteNav } from "@/components/site/SiteChrome";
 export const metadata: Metadata = {
   title: "Talise — dollars that move like messages",
   description:
-    "Hold dollars, send them to a name, spend them with a card and pay banks in over 30 countries. USDsui transfers are gasless on the Sui Network and settle in under a second.",
+    "Hold dollars, send them to a name, spend them with a card and pay banks in over 15 countries. USDsui transfers are gasless on the Sui Network and settle in under a second.",
 };
 
 export const dynamic = "force-dynamic";
@@ -161,7 +161,7 @@ export default async function LandingV5() {
           <div className="wrap hero-copy">
             <h1 className="lead d-hero rise">Dollars that move like&nbsp;messages.</h1>
             <p className="sub-lg rise" style={{ animationDelay: "80ms" }}>
-              Hold dollars, send them to a name, spend them with a card, and pay banks in over 30 countries.
+              Hold dollars, send them to a name, spend them with a card, and pay banks in over 15 countries.
               USDsui transfers are gasless on the Sui Network and settle in under a&nbsp;second.
             </p>
             <div className="hero-actions rise" style={{ animationDelay: "160ms" }}>

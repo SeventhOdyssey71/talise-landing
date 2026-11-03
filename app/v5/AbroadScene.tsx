@@ -3,8 +3,8 @@ import { InView } from "@/components/site/motion";
 /**
  * Sending abroad: where the dollar balance can pay, country by country, and
  * how each one is paid. Every rail listed is live in the apps (the corridor
- * list in lib/nuvion/corridors.ts); the counts are the countries it covers
- * (the UK, the 20 euro countries listed, and 15 more), with SWIFT for the rest.
+ * list in lib/nuvion/corridors.ts): "over 15 countries" (the founder's
+ * figure, counting Europe once), with SWIFT for the rest.
  */
 
 type Place = { flag: string | null; name: string; how: string };
@@ -37,7 +37,7 @@ export function AbroadScene() {
         <InView className="section-head">
           <p className="kicker">Send abroad</p>
           <h2 id="abroad-title" className="lead d-lg">
-            Pay a bank or mobile wallet in over 30&nbsp;countries.
+            Pay a bank or mobile wallet in over 15&nbsp;countries.
           </h2>
           <p className="sub-lg ab-sub">
             Pick a country, add who you&rsquo;re paying, and send from your dollar balance. They get it in their own
