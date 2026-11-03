@@ -1,0 +1,447 @@
+/*
+ * The landing only. Shared pieces (tokens, type, controls, nav pill, pass,
+ * ticket cards, receipt, footer, motion) live in app/site.css.
+ *
+ * Light grey + white sections, black `.band`s set into the page with rounded
+ * corners, glass where things float, film grain over everything.
+ */
+
+.talise-ui.landing { background: var(--color-bg); }
+
+/* ── Film grain: one fixed layer over the whole page ────────────────────── */
+.talise-ui .grain-layer {
+  position: fixed;
+  inset: -50%;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.075;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ── Black bands set into the light page ────────────────────────────────── */
+.talise-ui .band {
+  position: relative;
+  margin-inline: clamp(8px, 1.1vw, 14px);
+  border-radius: clamp(24px, 3vw, 40px);
+  background: var(--color-bg);
+  color: var(--color-fg-muted);
+  overflow: hidden;
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.talise-ui .hero {
+  position: relative;
+  min-height: max(720px, min(100svh, 1040px));
+  padding-block: clamp(136px, 19vh, 196px) 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.talise-ui .hero-wash {
+  position: absolute;
+  inset: -10% 0 auto;
+  height: 70%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(55% 60% at 50% 20%, var(--color-surface) 0%, transparent 72%);
+}
+.talise-ui .globe { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; }
+.talise-ui .globe[data-ready] { opacity: 1; }
+.talise-ui .globe canvas { display: block; width: 100%; height: 100%; }
+.talise-ui .hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 18%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+}
+.talise-ui .hero-copy { position: relative; z-index: 3; max-width: 920px; margin-inline: auto; text-align: center; }
+.talise-ui .hero-copy .sub-lg { max-width: 600px; margin: 24px auto 0; }
+.talise-ui .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-block-start: 36px; }
+
+/* glass message bubbles */
+.talise-ui .bubbles { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.talise-ui .bubble { position: absolute; }
+.talise-ui .bubble-in { opacity: 0; visibility: hidden; }
+.talise-ui .bubble-float {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 310px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 24px;
+  background: var(--color-glass);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 0 0 1px var(--color-line), var(--shadow-float);
+  color: var(--color-fg);
+}
+.talise-ui .bubble-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: var(--color-fg);
+  color: var(--color-on-accent);
+  font-family: var(--font-lead);
+  font-size: 16px;
+}
+.talise-ui .bubble-text { display: grid; gap: 2px; min-width: 0; }
+.talise-ui .bubble-title { font-size: 15px; font-weight: 500; line-height: 1.25; white-space: nowrap; }
+.talise-ui .bubble-meta { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--color-fg-dim); white-space: nowrap; }
+.talise-ui .bubble-check { display: inline-grid; place-items: center; }
+.talise-ui .bubble-action { flex: none; margin-inline-start: 4px; padding: 7px 14px; border-radius: 999px; background: var(--color-fg); color: var(--color-on-accent); font-size: 13px; font-weight: 500; }
+.talise-ui .bubble-out .bubble-float { background: var(--color-fg); color: var(--color-on-accent); box-shadow: var(--shadow-float); }
+/* Avatars are gradient orbs (lib/avatar-gradient), no initials. */
+.talise-ui .bubble-avatar,
+.talise-ui .rc-avatar { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 2px 6px rgb(0 0 0 / 0.12); }
+.talise-ui .bubble-out .bubble-meta { color: color-mix(in srgb, var(--color-on-accent) 66%, transparent); }
+.talise-ui .b-1 { left: 7%; top: 59%; }
+.talise-ui .b-2 { right: 6%; top: 51%; }
+.talise-ui .b-3 { left: 15%; top: 79%; }
+.talise-ui .b-4 { right: 13%; top: 76%; }
+@media (max-width: 719px) {
+  .talise-ui .b-3, .talise-ui .b-4 { display: none; }
+  .talise-ui .b-1 { left: 4%; top: 67%; }
+  .talise-ui .b-2 { right: 4%; top: 80%; }
+  .talise-ui .bubble-float { max-width: 270px; padding: 8px 14px 8px 8px; gap: 10px; }
+  .talise-ui .bubble-avatar { width: 32px; height: 32px; font-size: 14px; }
+  .talise-ui .bubble-title { font-size: 14px; }
+  .talise-ui .bubble-meta { font-size: 12px; }
+}
+
+/* ── Names: an address becomes @maya ────────────────────────────────────── */
+.talise-ui .names {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(88px, 12vh, 120px) clamp(40px, 6vh, 64px);
+}
+.talise-ui .names-inner { text-align: center; }
+.talise-ui .names-stage { position: relative; display: grid; place-items: center; height: clamp(130px, 17vw, 230px); margin-block: 20px 28px; }
+.talise-ui .names-stage > p { grid-area: 1 / 1; margin: 0; }
+.talise-ui .names-addr {
+  max-width: 34ch;
+  font-family: var(--font-mono);
+  font-size: clamp(15px, 2vw, 28px);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: var(--color-fg-muted);
+  word-break: break-all;
+}
+.talise-ui .names-handle {
+  font-family: var(--font-lead);
+  font-size: clamp(84px, 15vw, 210px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--color-fg);
+}
+.talise-ui .names-copy { max-width: 720px; margin-inline: auto; }
+.talise-ui .names-copy .sub-lg { margin-block-start: 16px; }
+.talise-ui .names-rows { display: grid; gap: 14px; margin-block-start: clamp(36px, 6vh, 64px); }
+.talise-ui .names-row { display: flex; gap: 14px; width: max-content; }
+.talise-ui .names-chip {
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-family: var(--font-lead);
+  font-size: clamp(20px, 2.4vw, 32px);
+  color: var(--color-fg-muted);
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px var(--color-line-strong);
+}
+.talise-ui .names-chip.is-solid { background: var(--color-fg); color: var(--color-on-accent); box-shadow: none; }
+
+/* ── Send: the pass, played by the scroll ───────────────────────────────── */
+.talise-ui .send { min-height: 100svh; display: flex; align-items: center; padding-block: 96px 40px; }
+.talise-ui .send-inner { display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 3.4vh, 36px); }
+.talise-ui .send-head { text-align: center; }
+.talise-ui .send-head .lead { margin-block-start: 10px; }
+.talise-ui .ss-pass { width: 100%; max-width: 930px; }
+.talise-ui .ss-path { position: relative; display: block; height: 24px; }
+.talise-ui .ss-track,
+.talise-ui .ss-line { position: absolute; inset-inline: 0; top: 50%; height: 1.5px; translate: 0 -50%; }
+.talise-ui .ss-track { background: var(--color-rule); }
+.talise-ui .ss-line { background: var(--color-fg); transform-origin: left center; }
+.talise-ui .ss-plane { position: absolute; inset-inline-start: 0; top: 50%; translate: 0 -50%; display: grid; place-items: center; padding-inline: 3px; background: var(--color-surface); color: var(--color-fg); }
+.talise-ui .ss-settles { display: grid; }
+.talise-ui .ss-settles > span { grid-area: 1 / 1; }
+.talise-ui .ss-dash { visibility: hidden; }
+.talise-ui .ss-chip[data-state="2"] { background: var(--color-fg); color: var(--color-on-accent); }
+.talise-ui .ss-pass .tpass-stub { background: var(--color-bg); color: var(--color-fg); overflow: hidden; }
+.talise-ui .ss-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(70% 45% at 50% 26%, rgb(255 255 255 / 0.22), transparent 72%);
+}
+.talise-ui .ss-fee, .talise-ui .ss-pass .qr, .talise-ui .ss-pass .tpass-url { position: relative; }
+.talise-ui .ss-stamp {
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 58%;
+  translate: -50% -50%;
+  rotate: -12deg;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--color-fg);
+  background: color-mix(in srgb, var(--color-bg) 72%, transparent);
+  color: var(--color-fg);
+  font-family: var(--font-lead);
+  font-size: 18px;
+  white-space: nowrap;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+@container (max-width: 719px) {
+  .talise-ui .ss-stamp { top: 50%; inset-inline-start: auto; inset-inline-end: 22px; translate: 0 -50%; font-size: 15px; padding: 7px 14px; }
+}
+.talise-ui .send-captions { width: 100%; max-width: 560px; text-align: center; }
+.talise-ui .send-bars { display: flex; justify-content: center; gap: 6px; margin-block-end: 18px; }
+.talise-ui .ss-bar { width: 28px; height: 3px; border-radius: 999px; background: var(--color-track); }
+.talise-ui .ss-bar[data-on] { background: var(--color-fg); }
+.talise-ui .send-steps { display: grid; margin: 0; padding: 0; list-style: none; }
+.talise-ui .send-steps li { grid-area: 1 / 1; opacity: 0; }
+.talise-ui .send-steps li[data-on] { opacity: 1; }
+.talise-ui .send-steps .sub { margin-block-start: 8px; }
+@media (max-width: 719px) {
+  .talise-ui .send { padding-block-start: 84px; }
+  .talise-ui .send-head .lead { font-size: 26px; }
+}
+
+/* ── Receive: payments landing on a glass phone ─────────────────────────── */
+.talise-ui .receive { padding-block: var(--section); isolation: isolate; }
+.talise-ui .rc-blob {
+  position: absolute;
+  z-index: -1;
+  width: min(560px, 80vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.2), transparent 64%);
+  filter: blur(24px);
+}
+.talise-ui .rc-blob-a { inset-inline-end: 2%; top: 4%; }
+.talise-ui .rc-blob-b { inset-inline-end: 26%; bottom: -12%; }
+.talise-ui .receive-grid { display: grid; gap: 56px; align-items: center; }
+@media (min-width: 960px) { .talise-ui .receive-grid { grid-template-columns: 1fr 1fr; } }
+.talise-ui .receive-copy .lead { margin-block-start: 10px; }
+.talise-ui .receive-copy .sub-lg { margin-block-start: 18px; max-width: 460px; }
+.talise-ui .rc-ways { margin: 32px 0 0; padding: 0; list-style: none; max-width: 460px; }
+.talise-ui .rc-way { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; border-block-start: 1px solid var(--color-line); }
+.talise-ui .rc-way .label { display: block; }
+.talise-ui .rc-way .value { display: block; }
+.talise-ui .rc-qr { position: relative; display: inline-block; flex: none; border-radius: 10px; overflow: hidden; line-height: 0; }
+.talise-ui .rc-qr .qr { padding: 8px; }
+.talise-ui .rc-scan { position: absolute; inset-inline: 4px; top: 12%; height: 2px; border-radius: 2px; background: rgb(0 0 0 / 0.55); box-shadow: 0 0 10px 2px rgb(0 0 0 / 0.25); }
+.talise-ui .rc-phone {
+  justify-self: center;
+  width: min(390px, 100%);
+  padding: 12px;
+  border-radius: 46px;
+  background: var(--color-glass);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  box-shadow: inset 0 0 0 1px var(--color-line-strong), var(--shadow-float);
+}
+.talise-ui .rc-screen { min-height: 470px; padding: 28px 18px 18px; border-radius: 36px; background: color-mix(in srgb, var(--color-bg) 55%, transparent); }
+.talise-ui .rc-head { display: grid; justify-items: center; gap: 4px; padding-block: 6px 22px; }
+.talise-ui .rc-balance { font-family: var(--font-lead); font-size: 46px; line-height: 1.05; letter-spacing: -0.025em; color: var(--color-fg); }
+.talise-ui .rc-sub { font-size: 13px; color: var(--color-fg-dim); }
+.talise-ui .rc-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.talise-ui .rc-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 22px; background: var(--color-glass); box-shadow: inset 0 0 0 1px var(--color-line); }
+.talise-ui .rc-avatar { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 999px; background: var(--color-accent-soft); color: var(--color-fg); font-family: var(--font-lead); font-size: 16px; }
+.talise-ui .rc-text { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.talise-ui .rc-title { font-size: 15px; color: var(--color-fg); }
+.talise-ui .rc-meta { font-size: 13px; color: var(--color-fg-dim); }
+.talise-ui .rc-amt { font-family: var(--font-lead); font-size: 17px; color: var(--color-fg); }
+
+/* ── Product: three live cards ──────────────────────────────────────────── */
+.talise-ui .sol-grid { display: grid; gap: 16px; }
+@media (min-width: 900px) { .talise-ui .sol-grid { grid-template-columns: repeat(3, 1fr); } }
+.talise-ui .sol-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;
+  padding: clamp(24px, 2.6vw, 36px);
+  border-radius: var(--r-card);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-line), var(--shadow-card);
+  overflow: hidden;
+}
+.talise-ui .sol-copy .sub { max-width: 34ch; }
+.talise-ui .sol-art { position: relative; flex: 1; min-height: 270px; margin-block-start: 24px; }
+.talise-ui .mini-globe { position: absolute; inset: 0 -36px -36px; width: calc(100% + 72px); height: calc(100% + 36px); }
+
+.talise-ui .acc { position: absolute; inset: 0; }
+.talise-ui .acc-card {
+  position: absolute;
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  height: 210px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-line-strong), 0 -6px 18px -12px rgb(0 0 0 / 0.18);
+}
+.talise-ui .acc-back-2 { top: 0; width: 76%; }
+.talise-ui .acc-back-1 { top: 38px; width: 82%; }
+.talise-ui .acc-front { top: 76px; width: 88%; }
+.talise-ui .acc-label { font-size: 12px; color: var(--color-fg-dim); }
+.talise-ui .acc-svg { position: absolute; inset-inline: 4%; bottom: 10px; width: 92%; height: auto; overflow: visible; }
+.talise-ui .acc-arc { stroke: var(--color-line-strong); stroke-width: 1.5; }
+.talise-ui .acc-start { fill: none; stroke: var(--color-fg-dim); stroke-width: 1.5; }
+.talise-ui .acc-base { stroke: var(--color-rule); stroke-dasharray: 2 4; }
+.talise-ui .acc-tick { stroke: var(--color-rule); }
+.talise-ui .acc-chip {
+  position: absolute;
+  inset-inline-end: 9%;
+  top: 46%;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--color-fg);
+  color: var(--color-on-accent);
+  font-family: var(--font-lead);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.talise-ui .cr { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.talise-ui .cr-track { fill: none; stroke: var(--color-line-strong); stroke-width: 1.2; }
+.talise-ui .cr-node { fill: var(--color-surface); stroke: var(--color-line-strong); }
+.talise-ui .cr-label { fill: var(--color-fg); font-family: var(--font-sub); font-size: 12px; }
+.talise-ui .cr-hub-rect { fill: var(--color-fg); }
+.talise-ui .cr-hub-label { fill: var(--color-on-accent); font-family: var(--font-lead); font-size: 12.5px; }
+.talise-ui .cr-packet { fill: var(--color-fg); }
+
+/* ── Talise card: the card settling flat in a black band ─────────────────── */
+.talise-ui .cardsc { padding-block: var(--section); isolation: isolate; }
+.talise-ui .cd-grid { display: grid; gap: 56px; align-items: center; }
+@media (min-width: 960px) { .talise-ui .cd-grid { grid-template-columns: 1fr 1fr; } }
+.talise-ui .cd-copy .lead { margin-block-start: 10px; }
+.talise-ui .cd-copy .sub-lg { margin-block-start: 18px; max-width: 460px; }
+.talise-ui .cd-stage {
+  position: relative;
+  justify-self: center;
+  width: min(440px, 100%);
+  padding-block: 56px;
+  perspective: 1200px;
+}
+.talise-ui .cd-card { transform-style: preserve-3d; will-change: transform; }
+.talise-ui .cd-chip {
+  position: absolute;
+  display: grid;
+  gap: 2px;
+  min-width: 168px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: var(--color-glass);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: inset 0 0 0 1px var(--color-line-strong), var(--shadow-float);
+}
+.talise-ui .cd-chip-a { inset-inline-end: -4%; top: -14px; }
+.talise-ui .cd-chip-b { inset-inline-start: -4%; bottom: 4px; }
+.talise-ui .cd-chip-title { font-size: 13px; color: var(--color-fg-dim); }
+.talise-ui .cd-chip-amt { font-family: var(--font-lead); font-size: 20px; letter-spacing: -0.01em; color: var(--color-fg); }
+
+/* ── Send abroad: where the balance can pay ─────────────────────────────── */
+.talise-ui .ab-sub { margin-block-start: 18px; max-width: 560px; }
+.talise-ui .ab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.talise-ui .ab-place {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 14px 18px;
+  border-radius: 22px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+.talise-ui .ab-flag {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  outline: 1px solid rgb(0 0 0 / 0.08);
+  outline-offset: -1px;
+}
+.talise-ui .ab-globe { display: grid; place-items: center; background: var(--color-fg); color: var(--color-on-accent); outline: 0; }
+.talise-ui .ab-text { display: grid; gap: 2px; min-width: 0; }
+.talise-ui .ab-name { font-size: 16px; color: var(--color-fg); }
+.talise-ui .ab-how { font-size: 13px; color: var(--color-fg-dim); }
+
+.talise-ui .feat-grid { margin-block-start: 16px; }
+@media (min-width: 680px) { .talise-ui .feat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── Numbers + close + footer ───────────────────────────────────────────── */
+.talise-ui .numbers { padding-block: var(--section); }
+.talise-ui .numbers .receipt { max-width: 930px; margin-inline: auto; }
+
+.talise-ui .close { position: relative; overflow: hidden; isolation: isolate; }
+.talise-ui .close-orb {
+  position: absolute;
+  z-index: -1;
+  width: min(520px, 90vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgb(0 0 0 / 0.16), transparent 64%);
+  filter: blur(18px);
+}
+.talise-ui .close-orb-a { inset-inline-start: 8%; top: 8%; }
+.talise-ui .close-orb-b { inset-inline-end: 6%; bottom: -6%; }
+.talise-ui .close-card {
+  max-width: 840px;
+  margin-inline: auto;
+  padding: clamp(44px, 6vw, 80px) clamp(24px, 5vw, 64px);
+  border-radius: 36px;
+  text-align: center;
+  background: var(--color-glass);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  box-shadow: inset 0 0 0 1px var(--color-line), var(--shadow-float);
+}
+.talise-ui .close-card .lead { max-width: 16ch; margin-inline: auto; }
+.talise-ui .close-card .sub-lg { max-width: 520px; margin: 20px auto 0; text-wrap: balance; }
+
+.talise-ui .footer-band {
+  margin: 0 clamp(8px, 1.1vw, 14px) clamp(8px, 1.1vw, 14px);
+  border-radius: clamp(24px, 3vw, 40px);
+}
+.talise-ui .footer-band .footer { border: 0; }
+
+/* ── Motion (only for people who haven't asked for less) ────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .talise-ui .globe { transition: opacity 1600ms var(--ease); }
+  .talise-ui .grain-layer { animation: grain 0.9s steps(4) infinite; }
+  @keyframes grain {
+    0% { translate: 0 0; }
+    25% { translate: -3% 2%; }
+    50% { translate: 2% -3%; }
+    75% { translate: -2% -1%; }
+    100% { translate: 0 0; }
+  }
+  .talise-ui .send-steps li { transition: opacity 360ms var(--ease); }
+  .talise-ui .ss-bar { transition: background-color 300ms var(--ease); }
+  .talise-ui .ss-chip { transition: background-color 300ms var(--ease), color 300ms var(--ease); }
+  .talise-ui .rc-scan { animation: scan 2.4s var(--ease) infinite alternate; }
+  @keyframes scan { from { top: 10%; } to { top: 88%; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .talise-ui .bubble-in { opacity: 1; visibility: visible; }
+}

@@ -1,0 +1,7 @@
+node_modules
+.next
+next-env.d.ts
+*.tsbuildinfo
+
+# Licensed brand fonts: add them locally (see app/fonts.css), never commit them.
+public/fonts/*.woff2

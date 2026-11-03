@@ -1,0 +1,388 @@
+@import "tailwindcss";
+/* Enter/exit animation utilities (animate-in / fade / zoom / slide) used by the
+   shadcn/ui Radix components (Select, DropdownMenu, …). */
+@import "tw-animate-css";
+/* app/admin is gitignored (local ops tool), and Tailwind v4 skips gitignored
+   files when scanning for classes — register it explicitly. */
+
+/*
+ * TALISE — one design system for every surface: the landing, content pages,
+ * public pay pages, analytics, admin and the /app wallet.
+ *
+ *   ground   light grey (#f4f4f4), white cards, hairlines — black-and-white
+ *            monochrome. `.theme-dark` turns any section black (same tokens).
+ *   colour   none. Black is the accent (white inside .theme-dark). The only hues are functional:
+ *            danger (errors, destructive) and warning (needs attention),
+ *            and status never rides on colour alone — always an icon or word.
+ *   type     SF Pro Rounded leads (`font-display`: headlines, figures, key
+ *            values); Neue Montreal carries everything else (`font-sans`).
+ *            Both are loaded by next/font/local (app/_fonts.ts) and applied on
+ *            <html>. Rounded ships Regular only: font-synthesis is off.
+ *   motif    the transfer pass — a body, a perforation, a stub.
+ *
+ * Full spec + component inventory: components/site/DESIGN.md.
+ * Site components (nav pill, pass, receipt, prose…) live in app/site.css.
+ *
+ * Earlier themes (dark-green iOS, light mint, the blueprint .bp-page /
+ * .app-clean canvases) are retired. Their class names survive below only so
+ * existing markup renders in the new system while it is migrated.
+ */
+
+@theme {
+  /* Light monochrome — the default for every surface. */
+  --color-bg: #f4f4f4;                 /* light grey ground */
+  --color-surface: #ffffff;            /* cards, pass body */
+  --color-surface-2: #f4f4f4;          /* raised on white: pass stub, inputs */
+  --color-surface-3: #ebebeb;          /* hover on raised */
+  --color-line: rgb(0 0 0 / 0.08);
+  --color-line-strong: rgb(0 0 0 / 0.16);
+  --color-fg: #0a0a0a;                 /* primary text */
+  --color-fg-muted: #525252;           /* body copy — 7.8:1 on bg */
+  --color-fg-dim: #6e6e6e;             /* labels, meta — 5.1:1 on white */
+  --color-accent: #0a0a0a;             /* black IS the accent */
+  --color-accent-light: #0a0a0a;
+  --color-accent-deep: #0a0a0a;        /* solid fills: primary buttons */
+  --color-accent-soft: rgb(0 0 0 / 0.05); /* chips, hover, selected rows */
+  --color-on-accent: #ffffff;          /* text on a solid fill */
+  --color-danger: #b9382d;             /* 5.9:1 on white */
+  --color-warning: #9a5b06;            /* 5.6:1 on white */
+  /* Money direction in activity lists: a light tint behind a darker glyph.
+     Never colour alone: the +/− sign and the icon carry it too.
+     (bg-money-in-soft / text-money-in, bg-money-out-soft / text-money-out) */
+  --color-money-in: #17803d;           /* 5.1:1 on its tint */
+  --color-money-in-soft: #e2f4e8;
+  --color-money-out: #b42d2d;          /* 5.4:1 on its tint */
+  --color-money-out-soft: #fbe6e4;
+  --color-success: #1fa855;            /* the success badge (text-success) */
+
+  /* Theme-dependent details (each redefined in .theme-dark). */
+  --color-solid-hover: #262626;
+  --color-rule: rgb(0 0 0 / 0.16);
+  --color-perforation: rgb(0 0 0 / 0.2);
+  --color-track: rgb(0 0 0 / 0.08);
+  --color-glass: rgb(255 255 255 / 0.62);
+  /* Frosted bars (the wallet tab bar): thin enough that what scrolls under
+     reads through the blur, a lit top edge, and a softer pill for the
+     current tab. */
+  --color-glass-thin: rgb(255 255 255 / 0.32);
+  --color-glass-pill: rgb(255 255 255 / 0.8);
+  --color-glass-edge: rgb(255 255 255 / 0.7);
+  --shadow-glass: inset 0 1px 0 var(--color-glass-edge), inset 0 0 0 1px rgb(255 255 255 / 0.35), 0 18px 44px -18px rgb(0 0 0 / 0.28), 0 2px 8px rgb(0 0 0 / 0.04);
+  /* Buttons with some weight (the wallet's "solid" and "raised" buttons): a
+     graphite gradient with a lit top edge and a soft drop shadow, and a white
+     one that sits just above the page. */
+  --shadow-solid: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 -1px 1px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.18), 0 12px 24px -10px rgb(0 0 0 / 0.45);
+  --shadow-raised: inset 0 1px 0 #ffffff, 0 0 0 1px rgb(0 0 0 / 0.045), 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 24px -12px rgb(0 0 0 / 0.18);
+  --color-scrim: rgb(10 10 10 / 0.32);
+  --color-ghost-edge: rgb(0 0 0 / 0.16);
+  --color-ghost-fill: rgb(255 255 255 / 0.5);
+  --color-edge-light: rgb(255 255 255 / 0);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -16px rgb(0 0 0 / 0.12);
+  --shadow-float: 0 12px 32px -8px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.04);
+
+  --font-sans: var(--font-sans-v2), "Neue Montreal", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display-v2), "SF Pro Rounded", ui-rounded, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-serif), "Instrument Serif", Georgia, "Times New Roman", serif;
+}
+
+/* Button gradients live outside @theme: Tailwind drops theme variables that no
+   utility uses, and the arbitrary bg-[image:var(...)] classes don't count. */
+:root {
+  --gradient-solid: linear-gradient(180deg, #3d3d3d 0%, #1e1e1e 52%, #0e0e0e 100%);
+  --gradient-raised: linear-gradient(180deg, #ffffff 0%, #fcfcfc 55%, #f5f5f5 100%);
+}
+
+/* A black section (the landing mixes them in). Same token names, dark values. */
+.theme-dark {
+  --color-bg: #000000;
+  --color-surface: #141414;
+  --color-surface-2: #1e1e1e;
+  --color-surface-3: #262626;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.18);
+  --color-fg: #fafafa;
+  --color-fg-muted: #a3a3a3;
+  --color-fg-dim: #8e8e8e;
+  --color-accent: #fafafa;
+  --color-accent-light: #fafafa;
+  --color-accent-deep: #fafafa;
+  --color-accent-soft: rgb(255 255 255 / 0.08);
+  --color-on-accent: #000000;
+  --color-danger: #ff6b5b;
+  --color-warning: #f2c14e;
+  --color-money-in: #6fd394;
+  --color-money-in-soft: rgb(111 211 148 / 0.14);
+  --color-money-out: #ff8a7a;
+  --color-money-out-soft: rgb(255 138 122 / 0.14);
+  --color-success: #3ccf73;
+  --color-solid-hover: #e4e4e4;
+  --color-rule: rgb(255 255 255 / 0.2);
+  --color-perforation: rgb(255 255 255 / 0.22);
+  --color-track: rgb(255 255 255 / 0.12);
+  --color-glass: rgb(22 22 22 / 0.62);
+  --color-glass-thin: rgb(24 24 24 / 0.45);
+  --color-glass-pill: rgb(255 255 255 / 0.12);
+  --color-glass-edge: rgb(255 255 255 / 0.1);
+  --shadow-glass: inset 0 1px 0 var(--color-glass-edge), inset 0 0 0 1px rgb(255 255 255 / 0.06), 0 18px 44px -18px rgb(0 0 0 / 0.6);
+  --gradient-solid: linear-gradient(180deg, #ffffff 0%, #ececec 100%);
+  --shadow-solid: inset 0 1px 0 #ffffff, inset 0 -1px 1px rgb(0 0 0 / 0.12), 0 12px 24px -10px rgb(0 0 0 / 0.6);
+  --gradient-raised: linear-gradient(180deg, #2a2a2a 0%, #1c1c1c 100%);
+  --shadow-raised: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 24px -12px rgb(0 0 0 / 0.6);
+  --color-scrim: rgb(0 0 0 / 0.5);
+  --color-ghost-edge: rgb(255 255 255 / 0.24);
+  --color-ghost-fill: rgb(0 0 0 / 0.35);
+  --color-edge-light: rgb(255 255 255 / 0.05);
+  --shadow-card: 0 0 #0000;
+  --shadow-float: 0 10px 30px rgb(0 0 0 / 0.45);
+  color-scheme: dark;
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+/* ── shadcn/ui token bridge ──────────────────────────────────────────────
+ * Maps shadcn's semantic names onto the Talise tokens so every generated
+ * component (Dialog, Select, DropdownMenu, Tooltip, Tabs, Popover…) renders
+ * black-and-white. `@theme inline` keeps the var() references live. */
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-fg);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-fg);
+  --color-primary: var(--color-accent-deep);
+  --color-primary-foreground: var(--color-on-accent);
+  --color-secondary: var(--color-surface-2);
+  --color-secondary-foreground: var(--color-fg);
+  --color-muted: var(--color-surface-2);
+  --color-muted-foreground: var(--color-fg-dim);
+  --color-destructive: var(--color-danger);
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--color-line);
+  --color-input: var(--color-line-strong);
+  --color-ring: var(--color-fg);
+}
+
+/* shadcn components that reference var(--radius) directly. */
+:root {
+  --radius: 1rem;
+}
+
+html {
+  color-scheme: light;
+  font-synthesis: none;
+}
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Desktop (precise pointer): no scroll bounce at all — the page sits fixed. */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+}
+
+::selection {
+  background: var(--color-fg);
+  color: var(--color-bg);
+}
+
+/* ── Retired theme scopes ───────────────────────────────────────────────
+ * .bp-page (content pages), .landing-mint (waitlist), .app-clean (wallet)
+ * used to repaint the tokens. They now inherit the one system and keep only
+ * the text colour (no background: shadcn menus still carry .app-clean, and a
+ * forced page ground would grey them out). */
+.bp-page,
+.landing-mint,
+.app-clean {
+  color: var(--color-fg);
+}
+.bp-page h1,
+.bp-page h2,
+.bp-page h3,
+.bp-page h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ── Legacy blueprint primitives, restyled ──────────────────────────────
+ * Corner ticks, bracket corners and frame rails were the old identity; they
+ * render as nothing now. Buttons become the system's pills, cards the
+ * system's surfaces, mono kickers plain labels. */
+.bp-tick,
+.bp-bracket,
+.bp-bracket-2 {
+  display: none !important;
+}
+.bp-frame {
+  position: relative;
+  margin: 0 auto;
+}
+.bp-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 24px;
+}
+.bp-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-fg-dim);
+}
+.bp-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, scale 200ms ease-out;
+}
+.bp-btn:not(:disabled):active { scale: 0.97; }
+.bp-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.bp-btn-full { width: 100%; }
+.bp-btn-solid { background: var(--color-accent-deep); color: var(--color-on-accent); }
+.bp-btn-ghost { background: transparent; color: var(--color-fg); box-shadow: inset 0 0 0 1px var(--color-line-strong); }
+.bp-btn-danger { background: transparent; color: var(--color-danger); box-shadow: inset 0 0 0 1px var(--color-danger); }
+@media (hover: hover) {
+  .bp-btn-solid:not(:disabled):hover { background: var(--color-solid-hover); }
+  .bp-btn-ghost:not(:disabled):hover { background: var(--color-accent-soft); }
+  .bp-btn-danger:not(:disabled):hover { background: var(--color-danger); color: var(--color-on-accent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bp-btn { transition: none; }
+}
+
+/* A flat card: surface, hairline, a lip of light on the top edge. */
+.talise-glass {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-card);
+}
+
+/* Borderless rows that fill on hover. No direction tints: the amount's sign
+   and the row's icon carry sent/received, not colour. */
+.talise-history-row {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition: background-color 150ms ease;
+}
+@media (hover: hover) {
+  .talise-history-row:hover { background: var(--color-surface-2); }
+}
+
+/* Smooth programmatic / anchor scrolling (respects reduced motion). */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Lenis smooth (momentum) scroll. Elements marked `data-lenis-prevent`
+   (sheets, dialogs, terminal panels) keep native scroll. */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* Strip the spinner arrows from <input type="number"> across browsers. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Film grain, for the few surfaces that still use it. */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ── App primitives ───────────────────────────────────────────────────── */
+
+/* SlideToConfirm: never let the drag select page text. */
+.talise-noselect {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Toast entrance — rise + fade in. */
+@keyframes taliseToastIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.talise-toast-in {
+  animation: taliseToastIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Sheet entrance — backdrop fades, panel rises (mobile) / scales (desktop). */
+@keyframes taliseSheetBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes taliseSheetPanelIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.talise-sheet-backdrop {
+  animation: taliseSheetBackdropIn 180ms ease both;
+}
+.talise-sheet-panel {
+  animation: taliseSheetPanelIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talise-toast-in,
+  .talise-sheet-backdrop,
+  .talise-sheet-panel {
+    animation: none;
+  }
+}
+
+/* Quiet scrollbars on black. */
+* {
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+/* Hide the scrollbar on horizontally-scrollable strips (e.g. the mobile nav pill). */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Success badge (send receipt): pops in, then the check draws itself. */
+@media (prefers-reduced-motion: no-preference) {
+  .success-badge { animation: success-pop 560ms cubic-bezier(0.22, 1.4, 0.36, 1) both; }
+  .success-badge .success-check { stroke-dasharray: 18; animation: success-draw 420ms ease-out 300ms both; }
+  .success-halo { animation: success-halo 900ms ease-out both; }
+}
+@keyframes success-pop { from { transform: scale(0.4) rotate(-24deg); opacity: 0; } }
+@keyframes success-draw { from { stroke-dashoffset: 18; } }
+@keyframes success-halo { from { transform: scale(0.6); opacity: 0; } }

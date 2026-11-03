@@ -1,0 +1,41 @@
+/*
+ * The brand fonts, when their files are present in public/fonts. They're
+ * licensed (SF Pro Rounded, Neue Montreal), so this repo doesn't ship them:
+ * add the .woff2 files named below to use them. Missing, the stacks in
+ * globals.css take over (ui-rounded is SF Pro Rounded on Apple devices).
+ */
+@font-face {
+  font-family: "Talise Rounded";
+  src: url("/fonts/SFProRounded-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Talise Sans";
+  src: url("/fonts/NeueMontreal-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Talise Sans";
+  src: url("/fonts/NeueMontreal-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Talise Sans";
+  src: url("/fonts/NeueMontreal-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Talise Sans";
+  src: url("/fonts/NeueMontreal-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --font-display-v2: "Talise Rounded";
+  --font-sans-v2: "Talise Sans";
+}

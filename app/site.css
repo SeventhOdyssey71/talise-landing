@@ -1,0 +1,562 @@
+/*
+ * TALISE site components — the shared layer every page builds from.
+ * Scope: `.talise-ui` (SitePage and the landing put it on their root).
+ * Tokens come from globals.css (@theme); the names below are the semantic
+ * aliases components read. Spec + usage: components/site/DESIGN.md.
+ */
+
+/* Everything sits in the `components` layer so a Tailwind utility on an
+   element always wins over these defaults. */
+@layer components {
+
+
+/* Aliases are re-declared on every .theme-dark section: custom properties
+   resolve where they're declared, so a dark section must recompute them. */
+.talise-ui,
+.talise-ui .theme-dark {
+  --font-lead: var(--font-display);
+  --font-sub: var(--font-sans);
+
+  --color-text: var(--color-fg);
+  --color-text-secondary: var(--color-fg-muted);
+  --color-text-tertiary: var(--color-fg-dim);
+  --color-hairline: var(--color-line);
+  --color-surface-raised: var(--color-surface-2);
+  --color-chip: var(--color-accent-soft);
+  --color-nav: var(--color-glass);
+  --color-solid: var(--color-accent);
+  --color-on-solid: var(--color-on-accent);
+  --color-ghost-hover: var(--color-accent-soft);
+  --color-focus: var(--color-fg);
+}
+
+.talise-ui {
+  --r-pass: 28px;
+  --r-card: 24px;
+  --r-field: 14px;
+  --notch: 12px;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --measure: 1160px;
+  --section: clamp(88px, 11vw, 160px);
+  --nav-clear: 104px; /* room under the fixed nav pill */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  min-height: 100svh;
+  overflow-x: clip;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sub);
+  font-weight: 400;
+}
+
+.talise-ui :where(a) { color: inherit; text-decoration: none; }
+:where(.talise-ui) :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+/* ── Type ───────────────────────────────────────────────────────────────── */
+.talise-ui .lead {
+  font-family: var(--font-lead);
+  font-weight: 400;
+  color: var(--color-text);
+  text-wrap: balance;
+  margin: 0;
+}
+.talise-ui .d-hero { font-size: clamp(44px, 7vw, 92px); line-height: 1; letter-spacing: -0.032em; }
+.talise-ui .d-xl { font-size: clamp(32px, 4.6vw, 64px); line-height: 1.06; letter-spacing: -0.026em; }
+.talise-ui .d-lg { font-size: clamp(30px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -0.022em; }
+.talise-ui .d-md { font-size: clamp(24px, 2.4vw, 32px); line-height: 1.12; letter-spacing: -0.018em; }
+.talise-ui .d-card { font-size: 26px; line-height: 1.15; letter-spacing: -0.016em; margin-block-start: 12px; }
+.talise-ui .d-sm { font-size: 22px; line-height: 1.2; letter-spacing: -0.012em; }
+
+.talise-ui .sub { margin: 12px 0 0; font-size: 16px; line-height: 1.55; color: var(--color-text-secondary); text-wrap: pretty; }
+.talise-ui .sub-lg { margin: 0; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.55; color: var(--color-text-secondary); text-wrap: pretty; }
+.talise-ui .kicker { margin: 0; font-size: 15px; color: var(--color-text-tertiary); }
+.talise-ui .label { font-size: 14px; color: var(--color-text-tertiary); white-space: nowrap; }
+.talise-ui .value { font-family: var(--font-lead); font-size: 19px; color: var(--color-text); margin-block-start: 6px; white-space: nowrap; }
+.talise-ui .num { font-variant-numeric: tabular-nums; }
+.talise-ui .dim { color: var(--color-text-tertiary); }
+.talise-ui .mono { font-family: var(--font-mono); font-size: 0.92em; letter-spacing: 0; }
+
+.talise-ui .wrap { width: 100%; max-width: var(--measure); margin-inline: auto; padding-inline: var(--gutter); }
+.talise-ui .wrap-narrow { width: 100%; max-width: 760px; margin-inline: auto; padding-inline: var(--gutter); }
+.talise-ui .section { padding-block: var(--section); }
+.talise-ui .section-head { margin-block-end: clamp(32px, 4vw, 48px); }
+.talise-ui .section-head .lead { margin-block-start: 10px; }
+.talise-ui .center { text-align: center; }
+
+/* ── Controls ───────────────────────────────────────────────────────────── */
+.talise-ui .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding-inline: 24px;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--font-sub);
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease), box-shadow 160ms var(--ease), scale 200ms ease-out;
+}
+.talise-ui .btn:not(:disabled):active { scale: 0.97; }
+.talise-ui .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.talise-ui .btn:focus-visible { border-radius: 999px; }
+.talise-ui .btn-solid { background: var(--color-solid); color: var(--color-on-solid); }
+.talise-ui .btn-ghost {
+  color: var(--color-text);
+  background: var(--color-ghost-fill);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px var(--color-ghost-edge);
+}
+.talise-ui .btn-sm { min-height: 40px; padding-inline: 18px; font-size: 15px; }
+.talise-ui .btn-block { width: 100%; }
+@media (pointer: coarse) { .talise-ui .btn-sm { min-height: 44px; } }
+@media (hover: hover) {
+  .talise-ui .btn-solid:not(:disabled):hover { background: var(--color-solid-hover); }
+  .talise-ui .btn-ghost:not(:disabled):hover { background: var(--color-ghost-hover); }
+  .talise-ui .nav-links a:hover,
+  .talise-ui .nav-login:hover,
+  .talise-ui .footer-links a:hover,
+  .talise-ui .text-link:hover { color: var(--color-text); }
+}
+
+/* An inline link inside running text. */
+.talise-ui .text-link {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-rule);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: auto;
+  transition: text-decoration-color 160ms var(--ease);
+}
+
+.talise-ui .skip {
+  position: absolute;
+  inset-inline-start: 16px;
+  inset-block-start: -100px;
+  z-index: 30;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--color-solid);
+  color: var(--color-on-solid);
+  font-weight: 500;
+}
+.talise-ui .skip:focus-visible { inset-block-start: 12px; }
+
+/* ── Nav: a floating glass pill, no rule under the page ─────────────────── */
+.talise-ui .nav {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: 12px;
+  z-index: 20;
+  padding-inline: var(--gutter);
+  pointer-events: none; /* only the pill takes clicks */
+}
+.talise-ui .nav-pill {
+  pointer-events: auto;
+  max-width: 880px;
+  height: 56px;
+  margin-inline: auto;
+  padding-inline: 18px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-radius: 999px;
+  background: var(--color-nav);
+  -webkit-backdrop-filter: saturate(150%) blur(18px);
+  backdrop-filter: saturate(150%) blur(18px);
+  box-shadow: inset 0 0 0 1px var(--color-hairline), var(--shadow-float);
+}
+.talise-ui .nav-brand { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; font-family: var(--font-lead); font-size: 20px; letter-spacing: -0.01em; color: var(--color-text); }
+.talise-ui .nav-links { display: flex; gap: 2px; }
+.talise-ui .nav-links a,
+.talise-ui .nav-login {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  transition: color 160ms var(--ease);
+}
+.talise-ui .nav-links a[aria-current="page"] { color: var(--color-text); }
+.talise-ui .nav-actions { display: flex; align-items: center; gap: 4px; }
+@media (max-width: 819px) { .talise-ui .nav-links { display: none; } }
+@media (max-width: 379px) { .talise-ui .nav-login { display: none; } }
+
+/* ── Page shell + header (every non-landing page) ───────────────────────── */
+.talise-ui .page-main { padding-block: var(--nav-clear) clamp(72px, 9vw, 128px); }
+.talise-ui .page-head { padding-block: clamp(32px, 6vw, 72px) clamp(32px, 4vw, 48px); }
+.talise-ui .page-head .lead { margin-block-start: 12px; }
+.talise-ui .page-head .sub-lg { margin-block-start: 18px; max-width: 640px; }
+.talise-ui .page-head.center .sub-lg { margin-inline: auto; }
+.talise-ui .page-meta { margin-block-start: 18px; font-size: 14px; color: var(--color-text-tertiary); }
+
+/* ── Prose: legal, blog, docs ───────────────────────────────────────────── */
+.talise-ui .prose { max-width: 68ch; font-size: 17px; line-height: 1.7; color: var(--color-text-secondary); }
+.talise-ui .prose > * + * { margin-block-start: 1.1em; }
+.talise-ui .prose h2 { margin-block: 2.4em 0.2em; font-family: var(--font-lead); font-weight: 400; font-size: 28px; line-height: 1.15; letter-spacing: -0.018em; color: var(--color-text); text-wrap: balance; scroll-margin-top: var(--nav-clear); }
+.talise-ui .prose h3 { margin-block: 1.8em 0.2em; font-family: var(--font-lead); font-weight: 400; font-size: 21px; line-height: 1.25; color: var(--color-text); text-wrap: balance; scroll-margin-top: var(--nav-clear); }
+.talise-ui .prose strong { font-weight: 500; color: var(--color-text); }
+.talise-ui .prose a { color: var(--color-text); text-decoration: underline; text-decoration-color: var(--color-rule); text-underline-offset: 3px; text-underline-position: from-font; text-decoration-skip-ink: auto; overflow-wrap: break-word; }
+.talise-ui .prose ul, .talise-ui .prose ol { padding-inline-start: 1.25em; }
+.talise-ui .prose li + li { margin-block-start: 0.4em; }
+.talise-ui .prose li::marker { color: var(--color-text-tertiary); }
+.talise-ui .prose hr { border: 0; border-block-start: 1px solid var(--color-hairline); margin-block: 2.4em; }
+.talise-ui .prose code { font-family: var(--font-mono); font-size: 0.88em; padding: 0.12em 0.4em; border-radius: 6px; background: var(--color-accent-soft); color: var(--color-text); }
+.talise-ui .prose pre { padding: 18px 20px; border-radius: 16px; background: var(--color-surface); overflow-x: auto; font-size: 14px; line-height: 1.6; }
+.talise-ui .prose pre code { padding: 0; background: none; }
+.talise-ui .prose blockquote { padding-inline-start: 18px; border-inline-start: 2px solid var(--color-rule); color: var(--color-text); }
+.talise-ui .prose img { border-radius: 16px; outline: 1px solid var(--color-line); outline-offset: -1px; }
+
+/* ── Surfaces ───────────────────────────────────────────────────────────── */
+/* A plain card: surface, hairline, a lip of light. For dashboards and forms. */
+.talise-ui .panel {
+  position: relative;
+  border-radius: var(--r-card);
+  background: var(--color-surface);
+  padding: clamp(20px, 2.6vw, 28px);
+}
+.talise-ui .panel::after,
+.talise-ui .tpass-card::after,
+.talise-ui .fcard::after,
+.talise-ui .receipt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--color-hairline), inset 0 1px 0 var(--color-edge-light);
+}
+/* Elevation. Panels use box-shadow (a filter would trap position:fixed
+   children like sheets); the pass needs drop-shadow to follow its notches. */
+.talise-ui .panel { box-shadow: var(--shadow-card); }
+.talise-ui .tpass { filter: drop-shadow(0 10px 22px rgb(0 0 0 / var(--card-shadow-a, 0.06))); }
+.talise-ui .theme-dark { --card-shadow-a: 0; }
+.talise-ui .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-block-end: 18px; }
+.talise-ui .grid-2 { display: grid; gap: 16px; }
+.talise-ui .grid-3 { display: grid; gap: 16px; }
+.talise-ui .grid-4 { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 760px) {
+  .talise-ui .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .talise-ui .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .talise-ui .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+.talise-ui .stat { font-family: var(--font-lead); font-size: clamp(30px, 3.6vw, 44px); line-height: 1; letter-spacing: -0.02em; color: var(--color-text); }
+.talise-ui .stat-sm { font-family: var(--font-lead); font-size: 28px; line-height: 1.05; letter-spacing: -0.016em; color: var(--color-text); }
+
+/* chips + status badges — never colour alone: pair with a word or icon */
+.talise-ui .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding-inline: 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  background: var(--color-chip);
+  white-space: nowrap;
+}
+.talise-ui .chip-solid { color: var(--color-on-solid); background: var(--color-solid); }
+.talise-ui .chip-danger { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 12%, transparent); }
+.talise-ui .chip-warning { color: var(--color-warning); background: color-mix(in srgb, var(--color-warning) 12%, transparent); }
+
+/* ── Tables (analytics, admin) ──────────────────────────────────────────── */
+.talise-ui .table-wrap { overflow-x: auto; }
+.talise-ui .table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+.talise-ui .table th {
+  padding: 0 12px 12px;
+  text-align: start;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  border-block-end: 1px solid var(--color-hairline);
+}
+.talise-ui .table td { padding: 14px 12px; color: var(--color-text); border-block-end: 1px solid var(--color-hairline); }
+.talise-ui .table tr:last-child td { border-block-end: 0; }
+.talise-ui .table .end { text-align: end; }
+.talise-ui .table th:first-child, .talise-ui .table td:first-child { padding-inline-start: 0; }
+.talise-ui .table th:last-child, .talise-ui .table td:last-child { padding-inline-end: 0; }
+
+/* ── Forms ──────────────────────────────────────────────────────────────── */
+.talise-ui .field { display: grid; gap: 8px; }
+.talise-ui .field-label { font-size: 14px; color: var(--color-text-secondary); }
+.talise-ui .field-hint { font-size: 13px; color: var(--color-text-tertiary); }
+.talise-ui .field-error { font-size: 13px; color: var(--color-danger); }
+.talise-ui .input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--r-field);
+  background: var(--color-surface-raised);
+  box-shadow: inset 0 0 0 1px var(--color-hairline);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px; /* ≥16px: iOS never zooms the page on focus */
+  transition: box-shadow 160ms var(--ease);
+}
+.talise-ui .input::placeholder { color: var(--color-text-tertiary); }
+.talise-ui .input:focus-visible { outline: none; box-shadow: inset 0 0 0 1.5px var(--color-fg); }
+.talise-ui .input[aria-invalid="true"] { box-shadow: inset 0 0 0 1px var(--color-danger); }
+
+/* Segmented control (tabs, ranges). Concentric: 999 outer, 999 inner. */
+.talise-ui .segmented { display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-hairline); }
+.talise-ui .segmented button,
+.talise-ui .segmented a {
+  min-height: 36px;
+  padding-inline: 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+.talise-ui .segmented [aria-pressed="true"],
+.talise-ui .segmented [aria-selected="true"],
+.talise-ui .segmented [aria-current="page"] { background: var(--color-solid); color: var(--color-on-solid); }
+
+/* ── The transfer pass ──────────────────────────────────────────────────── */
+.talise-ui .tpass { position: relative; margin: 0; container-type: inline-size; }
+.talise-ui .tpass-card {
+  --stub: 252px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr var(--stub);
+  min-height: 308px;
+  border-radius: var(--r-pass);
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 97%, #000 100%),
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 97%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 97%, #000 100%),
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 97%, #000 100%);
+  mask-composite: intersect;
+}
+.talise-ui .tpass-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 40px;
+  background: var(--color-surface);
+  border-start-start-radius: var(--r-pass);
+  border-end-start-radius: var(--r-pass);
+}
+.talise-ui .tpass-top { display: flex; justify-content: space-between; align-items: center; }
+.talise-ui .tpass-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-lead); font-size: 19px; color: var(--color-text); }
+.talise-ui .tpass-date { font-size: 18px; color: var(--color-text-tertiary); }
+.talise-ui .tpass-route { display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 26px; }
+.talise-ui .tpass-code { font-family: var(--font-lead); font-size: 64px; line-height: 1; letter-spacing: -0.02em; color: var(--color-text); }
+.talise-ui .tpass-place { margin-block-start: 10px; font-size: 18px; color: var(--color-text-tertiary); }
+.talise-ui .tpass-path { display: flex; align-items: center; gap: 16px; color: var(--color-text-tertiary); }
+.talise-ui .tpass-rule { flex: 1; height: 1.5px; background: var(--color-rule); }
+.talise-ui .tpass-end { text-align: end; }
+.talise-ui .tpass-fields { display: grid; grid-template-columns: 1fr auto 1fr; }
+.talise-ui .tpass-fields .label { font-size: 16px; }
+.talise-ui .tpass-fields .value { font-size: 23px; margin-block-start: 8px; }
+.talise-ui .tpass-stub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 28px 26px;
+  background: var(--color-surface-raised);
+  border-start-end-radius: var(--r-pass);
+  border-end-end-radius: var(--r-pass);
+}
+.talise-ui .tpass-stub::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -1px;
+  inset-block: 24px;
+  width: 2px;
+  background: linear-gradient(var(--color-perforation) 50%, transparent 0) 0 0 / 2px 12px repeat-y;
+}
+.talise-ui .tpass-fee { text-align: center; }
+.talise-ui .tpass-zero { margin-block-start: 4px; font-family: var(--font-lead); font-size: 44px; line-height: 1.05; letter-spacing: -0.02em; color: var(--color-text); }
+.talise-ui .tpass-url { font-size: 15px; color: var(--color-text-tertiary); }
+.talise-ui .qr { display: inline-block; padding: 11px; border-radius: 10px; background: #fff; line-height: 0; box-shadow: inset 0 0 0 1px var(--color-line); }
+
+/* Narrow: the stub drops under the body and the perforation turns sideways. */
+@container (max-width: 719px) {
+  .talise-ui .tpass-card {
+    --stub-h: 124px;
+    grid-template-columns: 1fr;
+    min-height: 0;
+    -webkit-mask:
+      radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub-h)), #0000 97%, #000 100%),
+      radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub-h)), #0000 97%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask:
+      radial-gradient(circle var(--notch) at 0 calc(100% - var(--stub-h)), #0000 97%, #000 100%),
+      radial-gradient(circle var(--notch) at 100% calc(100% - var(--stub-h)), #0000 97%, #000 100%);
+    mask-composite: intersect;
+  }
+  .talise-ui .tpass-main { gap: 22px; padding: 22px 22px 24px; border-radius: var(--r-pass) var(--r-pass) 0 0; }
+  .talise-ui .tpass-brand { font-size: 17px; }
+  .talise-ui .tpass-date { font-size: 15px; }
+  .talise-ui .tpass-route { column-gap: 12px; }
+  .talise-ui .tpass-code { font-size: clamp(36px, 13cqi, 56px); }
+  .talise-ui .tpass-place { font-size: 14px; margin-block-start: 8px; }
+  .talise-ui .tpass-path { gap: 8px; }
+  .talise-ui .tpass-fields { gap: 12px; }
+  .talise-ui .tpass-fields .label { font-size: 13px; }
+  .talise-ui .tpass-fields .value { font-size: 18px; margin-block-start: 6px; }
+  .talise-ui .tpass-stub { height: var(--stub-h); flex-direction: row; justify-content: space-between; padding: 0 22px; border-radius: 0 0 var(--r-pass) var(--r-pass); }
+  .talise-ui .tpass-stub::before {
+    inset-inline: 22px;
+    inset-block: -1px auto;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-perforation) 50%, transparent 0) 0 0 / 12px 2px repeat-x;
+  }
+  .talise-ui .tpass-fee { text-align: start; }
+  .talise-ui .tpass-zero { font-size: 38px; }
+  .talise-ui .tpass-stub .qr { padding: 8px; border-radius: 8px; }
+  .talise-ui .tpass-stub .qr svg { width: 64px; height: 64px; }
+  .talise-ui .tpass-url { display: none; }
+}
+
+/* ── Ticket card: a card with a perforated stub ─────────────────────────── */
+.talise-ui .fgrid { display: grid; gap: 16px; }
+@media (min-width: 680px) {
+  .talise-ui .fgrid { grid-template-columns: repeat(2, 1fr); }
+  .talise-ui .fcard { min-height: 340px; }
+}
+@media (min-width: 1024px) { .talise-ui .fgrid { grid-template-columns: repeat(3, 1fr); } }
+.talise-ui .fcard {
+  --stub-h: 104px;
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr var(--stub-h);
+  border-radius: var(--r-card);
+  -webkit-mask:
+    radial-gradient(circle 10px at 0 calc(100% - var(--stub-h)), #0000 97%, #000 100%),
+    radial-gradient(circle 10px at 100% calc(100% - var(--stub-h)), #0000 97%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(circle 10px at 0 calc(100% - var(--stub-h)), #0000 97%, #000 100%),
+    radial-gradient(circle 10px at 100% calc(100% - var(--stub-h)), #0000 97%, #000 100%);
+  mask-composite: intersect;
+}
+.talise-ui .fcard-body { padding: 28px 28px 24px; background: var(--color-surface); border-radius: var(--r-card) var(--r-card) 0 0; }
+.talise-ui .fcard-stub { position: relative; display: flex; align-items: center; padding-inline: 28px; background: var(--color-surface-raised); border-radius: 0 0 var(--r-card) var(--r-card); }
+.talise-ui .fcard-stub::before,
+.talise-ui .perf::before {
+  content: "";
+  position: absolute;
+  inset-inline: 20px;
+  inset-block-start: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-perforation) 50%, transparent 0) 0 0 / 12px 2px repeat-x;
+}
+.talise-ui .perf { position: relative; }
+
+.talise-ui .fields { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px; width: 100%; margin: 0; }
+.talise-ui .fields dd { margin: 6px 0 0; }
+
+.talise-ui .goal { width: 100%; }
+.talise-ui .goal-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.talise-ui .goal-row .value { margin: 0; }
+.talise-ui .goal-bar { height: 6px; margin-block-start: 12px; border-radius: 999px; background: var(--color-track); overflow: hidden; }
+.talise-ui .goal-bar span { display: block; height: 100%; border-radius: inherit; background: var(--color-text); }
+
+.talise-ui .receive { display: flex; align-items: center; gap: 16px; }
+.talise-ui .receive .qr { padding: 6px; border-radius: 8px; }
+
+/* ── Receipt: a card with a perforated header ───────────────────────────── */
+.talise-ui .receipt {
+  --head-h: 72px;
+  position: relative;
+  border-radius: var(--r-pass);
+  background: var(--color-surface);
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 var(--head-h), #0000 97%, #000 100%),
+    radial-gradient(circle var(--notch) at 100% var(--head-h), #0000 97%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(circle var(--notch) at 0 var(--head-h), #0000 97%, #000 100%),
+    radial-gradient(circle var(--notch) at 100% var(--head-h), #0000 97%, #000 100%);
+  mask-composite: intersect;
+}
+.talise-ui .receipt-head {
+  position: relative;
+  height: var(--head-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-inline: clamp(22px, 3.4vw, 36px);
+}
+.talise-ui .receipt-head::after {
+  content: "";
+  position: absolute;
+  inset-inline: 22px;
+  inset-block-end: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-perforation) 50%, transparent 0) 0 0 / 12px 2px repeat-x;
+}
+.talise-ui .receipt-body { padding: clamp(24px, 3.4vw, 36px); }
+.talise-ui .receipt-fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 24px; margin: 0; padding: clamp(28px, 4vw, 40px) clamp(22px, 3.4vw, 36px); }
+@media (min-width: 760px) { .talise-ui .receipt-fields { grid-template-columns: repeat(4, 1fr); } }
+.talise-ui .receipt-fields dd { margin: 8px 0 0; }
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.talise-ui .footer { border-block-start: 1px solid var(--color-hairline); }
+.talise-ui .footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding-block: 32px; }
+.talise-ui .footer-links { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-inline-start: -8px; /* optical: text, not hit area, aligns */ }
+.talise-ui .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 8px;
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  transition: color 160ms var(--ease);
+}
+
+/* ── Motion: entrances, only for people who haven't asked for less ─────── */
+.talise-ui .reveal-words .rw-line { display: block; }
+.talise-ui .reveal-words .w { color: inherit; }
+.talise-ui .caret { display: inline-block; width: 2px; height: 0.95em; margin-inline-start: 2px; vertical-align: -0.1em; background: var(--color-text); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .talise-ui .reveal {
+    transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  .talise-ui .reveal[data-armed]:not([data-in]) { opacity: 0; transform: translateY(22px); }
+  .talise-ui .reveal .goal-bar span { transition: width 1100ms var(--ease) 350ms; }
+  .talise-ui .reveal[data-armed]:not([data-in]) .goal-bar span { width: 0 !important; }
+
+  .talise-ui .reveal-words .w { transition: opacity 380ms var(--ease); }
+  .talise-ui .reveal-words[data-armed] .w:not([data-on]) { opacity: 0.14; }
+
+  .talise-ui .chip { transition: background-color 300ms var(--ease), color 300ms var(--ease); }
+  .talise-ui .caret { animation: t-blink 1s steps(2, start) infinite; }
+  @keyframes t-blink { to { visibility: hidden; } }
+
+  .talise-ui .rise { animation: t-rise 640ms var(--ease) both; }
+  @keyframes t-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+}
